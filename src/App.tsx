@@ -194,6 +194,13 @@ export default function App() {
   const [friendsOpen, setFriendsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mode, setMode] = useState("SQUADS");
+  const [map, setMap] = useState("RANDOM");
+
+  const maps = [
+    { name: "RANDOM", detail: "ALL MAPS", className: "random" },
+    { name: "OUTLANDS", detail: "DAY", className: "outlands" },
+    { name: "FROSTLINE", detail: "NIGHT", className: "frostline" },
+  ];
 
   const nav = [
     ["Lobby", "home"],
@@ -383,6 +390,27 @@ export default function App() {
             </button>
           </div>
           <div className="play-zone">
+            <div className="map-picker panel">
+              <div className="map-picker-title">
+                <span>SELECT MAP</span>
+                <small>{map === "RANDOM" ? "ROTATION ENABLED" : "PREFERRED MAP"}</small>
+              </div>
+              <div className="map-options">
+                {maps.map((mapOption) => (
+                  <button
+                    className={`${mapOption.className} ${map === mapOption.name ? "selected" : ""}`}
+                    key={mapOption.name}
+                    onClick={() => setMap(mapOption.name)}
+                  >
+                    <i />
+                    <span>
+                      <b>{mapOption.name}</b>
+                      <small>{mapOption.detail}</small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="party-state">
               <span className="status-dot" />
               <b>{queue ? "SEARCHING FOR MATCH" : "PARTY READY"}</b>
@@ -392,7 +420,9 @@ export default function App() {
               onClick={() => setQueue(!queue)}
             >
               <span>{queue ? "CANCEL" : "PLAY"}</span>
-              <small>{queue ? "EST. 00:42" : `${mode} • BATTLE ROYALE`}</small>
+              <small>
+                {queue ? "EST. 00:42" : `${mode} • ${map === "RANDOM" ? "MAP ROTATION" : map}`}
+              </small>
             </button>
           </div>
         </section>

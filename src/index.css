@@ -339,6 +339,8 @@
   clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
 }
 .left-column {
+  grid-column: 3;
+  grid-row: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -550,6 +552,8 @@
 }
 
 .stage {
+  grid-column: 2;
+  grid-row: 1;
   position: relative;
   min-width: 0;
   height: 100%;
@@ -672,10 +676,101 @@
   position: absolute;
   z-index: 5;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 0;
   width: 350px;
   text-align: center;
+}
+.map-picker {
+  padding: 12px;
+  margin-bottom: 9px;
+  text-align: left;
+}
+.map-picker-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 9px;
+}
+.map-picker-title span {
+  font: 800 11px "Barlow Condensed";
+  letter-spacing: 1.4px;
+}
+.map-picker-title small {
+  color: var(--lime);
+  font: 700 7px Inter;
+  letter-spacing: 0.8px;
+}
+.map-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.map-options button {
+  position: relative;
+  height: 66px;
+  overflow: hidden;
+  border: 1px solid #3a494f;
+  background: #17262d;
+  color: #a2afb3;
+}
+.map-options button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(5, 12, 16, 0.94), rgba(5, 12, 16, 0.08) 75%);
+}
+.map-options button > i {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 68% 28%, rgba(238, 255, 155, 0.38) 0 5%, transparent 6%),
+    linear-gradient(145deg, #688854 0 32%, #304e42 33% 60%, #1c3033 61%);
+  transition: transform 0.25s;
+}
+.map-options button.outlands > i {
+  background:
+    linear-gradient(25deg, transparent 49%, rgba(216, 183, 113, 0.3) 50% 53%, transparent 54%),
+    linear-gradient(145deg, #9d7444 0 31%, #53613a 32% 61%, #243d3a 62%);
+}
+.map-options button.frostline > i {
+  background:
+    radial-gradient(circle at 65% 22%, rgba(182, 235, 255, 0.65) 0 5%, transparent 6%),
+    linear-gradient(145deg, #8ab5bc 0 28%, #526a77 29% 61%, #1d3040 62%);
+}
+.map-options button > span {
+  position: absolute;
+  z-index: 1;
+  inset: auto 6px 6px;
+  display: flex;
+  flex-direction: column;
+}
+.map-options button b {
+  color: #eef3f3;
+  font: 800 10px "Barlow Condensed";
+  letter-spacing: 0.6px;
+}
+.map-options button small {
+  color: #89989d;
+  font: 700 6px Inter;
+  letter-spacing: 0.7px;
+  margin-top: 1px;
+}
+.map-options button:hover > i {
+  transform: scale(1.08);
+}
+.map-options button.selected {
+  border-color: var(--lime);
+  box-shadow: inset 0 0 0 1px rgba(200, 242, 58, 0.35);
+}
+.map-options button.selected::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent var(--lime) transparent transparent;
 }
 .party-state {
   font: 700 9px Inter;
@@ -767,13 +862,15 @@
 }
 
 .friends-panel {
+  grid-column: 1;
+  grid-row: 1;
   height: fit-content;
   max-height: 100%;
   padding: 14px;
   transition: 0.2s;
 }
 .friends-panel.collapsed {
-  justify-self: end;
+  justify-self: start;
   width: 50px;
   padding: 14px 10px;
 }
