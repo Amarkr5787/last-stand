@@ -1,1 +1,10 @@
-{}
+{
+  "description": "A multiplayer battle royale lobby where players preview characters, connect with friends, manage gear and skins, shop, and launch survival matches.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
