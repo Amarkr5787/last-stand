@@ -866,13 +866,20 @@
   grid-row: 1;
   height: fit-content;
   max-height: 100%;
+  width: 100%;
+  overflow: hidden;
   padding: 14px;
-  transition: 0.2s;
+  transform-origin: left center;
+  transition:
+    width 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    padding 0.32s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.32s ease;
 }
 .friends-panel.collapsed {
   justify-self: start;
   width: 50px;
   padding: 14px 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 }
 .friends-head {
   display: flex;
@@ -880,11 +887,19 @@
   justify-content: space-between;
   padding: 1px 0 13px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    padding 0.25s ease,
+    border-color 0.25s ease;
 }
 .friends-head > div {
   display: flex;
   align-items: center;
   gap: 8px;
+  white-space: nowrap;
+  opacity: 1;
+  transition:
+    opacity 0.16s ease,
+    width 0.28s ease;
 }
 .friends-head svg {
   color: #98aaaf;
@@ -904,7 +919,40 @@
   font: 800 9px Inter;
 }
 .friends-head button {
+  flex: none;
   color: #7d8b91;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+.friends-head button:hover {
+  color: var(--lime);
+  transform: scale(1.08);
+}
+.friends-panel.collapsed .friends-head {
+  justify-content: center;
+  padding-bottom: 0;
+  border-color: transparent;
+}
+.friends-panel.collapsed .friends-head > div {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.friends-content {
+  max-height: 520px;
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    max-height 0.34s cubic-bezier(0.2, 0.8, 0.2, 1),
+    opacity 0.2s ease 0.08s,
+    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.friends-panel.collapsed .friends-content {
+  max-height: 0;
+  opacity: 0;
+  transform: translateX(-24px);
+  pointer-events: none;
 }
 .search {
   height: 34px;

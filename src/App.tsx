@@ -427,56 +427,65 @@ export default function App() {
           </div>
         </section>
 
-        <aside className={`friends-panel panel ${friendsOpen ? "" : "collapsed"}`}>
+        <aside
+          className={`friends-panel panel ${friendsOpen ? "" : "collapsed"}`}
+          aria-label="Friends drawer"
+        >
           <div className="friends-head">
             <div>
               <Icon name="group" size={19} />
               <b>FRIENDS</b>
               <span>3</span>
             </div>
-            <button onClick={() => setFriendsOpen(!friendsOpen)} aria-label="Toggle friends panel">
+            <button
+              onClick={() => setFriendsOpen(!friendsOpen)}
+              aria-label={friendsOpen ? "Close friends drawer" : "Open friends drawer"}
+              aria-expanded={friendsOpen}
+            >
               <Icon name={friendsOpen ? "close" : "group"} size={18} />
             </button>
           </div>
-          {friendsOpen && (
-            <>
-              <label className="search">
-                <Icon name="search" size={16} />
-                <input placeholder="Search friends" />
-              </label>
-              <button className="invite-card">
-                <span>
-                  <Icon name="plus" />
-                </span>
-                <div>
-                  <b>INVITE FRIENDS</b>
-                  <small>Build your squad</small>
-                </div>
-              </button>
-              <div className="friend-label">ONLINE — 3</div>
-              <div className="friend-list">
-                {friends.map((friend) => (
-                  <button className={!friend.online ? "offline" : ""} key={friend.name}>
-                    <span
-                      className="friend-avatar"
-                      style={{ "--avatar": friend.color } as React.CSSProperties}
-                    >
-                      {friend.initials}
-                      <i />
-                    </span>
-                    <span>
-                      <b>{friend.name}</b>
-                      <small>{friend.status}</small>
-                    </span>
-                    {friend.online && <i className="join">+</i>}
-                  </button>
-                ))}
+          <div className="friends-content" aria-hidden={!friendsOpen}>
+            <label className="search">
+              <Icon name="search" size={16} />
+              <input placeholder="Search friends" tabIndex={friendsOpen ? 0 : -1} />
+            </label>
+            <button className="invite-card" tabIndex={friendsOpen ? 0 : -1}>
+              <span>
+                <Icon name="plus" />
+              </span>
+              <div>
+                <b>INVITE FRIENDS</b>
+                <small>Build your squad</small>
               </div>
-              <button className="social-button">
-                <Icon name="headset" size={18} /> OPEN SOCIAL HUB
-              </button>
-            </>
-          )}
+            </button>
+            <div className="friend-label">ONLINE — 3</div>
+            <div className="friend-list">
+              {friends.map((friend) => (
+                <button
+                  className={!friend.online ? "offline" : ""}
+                  key={friend.name}
+                  tabIndex={friendsOpen ? 0 : -1}
+                >
+                  <span
+                    className="friend-avatar"
+                    style={{ "--avatar": friend.color } as React.CSSProperties}
+                  >
+                    {friend.initials}
+                    <i />
+                  </span>
+                  <span>
+                    <b>{friend.name}</b>
+                    <small>{friend.status}</small>
+                  </span>
+                  {friend.online && <i className="join">+</i>}
+                </button>
+              ))}
+            </div>
+            <button className="social-button" tabIndex={friendsOpen ? 0 : -1}>
+              <Icon name="headset" size={18} /> OPEN SOCIAL HUB
+            </button>
+          </div>
         </aside>
       </section>
 
