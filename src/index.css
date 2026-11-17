@@ -673,14 +673,15 @@
   visibility: hidden;
 }
 .play-zone {
-  position: absolute;
-  z-index: 5;
-  bottom: 0;
-  right: 0;
-  width: 350px;
+  position: fixed;
+  z-index: 9;
+  right: 26px;
+  bottom: 54px;
+  width: 286px;
   text-align: center;
 }
 .map-picker {
+  width: 100%;
   padding: 12px;
   margin-bottom: 9px;
   text-align: left;
@@ -1277,6 +1278,10 @@ footer .server {
   }
   .squad-slots button b {
     display: none;
+  }
+  .play-zone {
+    right: 16px;
+    width: 250px;
   }
 }
 
