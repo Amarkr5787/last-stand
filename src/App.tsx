@@ -389,6 +389,10 @@ export default function App() {
               <b>INVITE PLAYER</b>
             </button>
           </div>
+          <div className="party-state character-ready">
+            <span className="status-dot" />
+            <b>{queue ? "SEARCHING FOR MATCH" : "PARTY READY"}</b>
+          </div>
           <div className="play-zone">
             <div className="map-picker panel">
               <div className="map-picker-title">
@@ -410,10 +414,6 @@ export default function App() {
                   </button>
                 ))}
               </div>
-            </div>
-            <div className="party-state">
-              <span className="status-dot" />
-              <b>{queue ? "SEARCHING FOR MATCH" : "PARTY READY"}</b>
             </div>
             <button
               className={`play-button ${queue ? "queued" : ""}`}

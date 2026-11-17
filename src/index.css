@@ -776,10 +776,23 @@
   font: 700 9px Inter;
   letter-spacing: 1.3px;
   color: #b4c0c4;
-  margin-bottom: 7px;
 }
 .party-state span {
   margin-right: 7px;
+}
+.character-ready {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  bottom: 49px;
+  min-width: 154px;
+  padding: 8px 12px;
+  transform: translateX(-50%);
+  background: rgba(7, 15, 20, 0.84);
+  border: 1px solid rgba(174, 205, 214, 0.16);
+  text-align: center;
+  clip-path: polygon(7px 0, 100% 0, calc(100% - 7px) 100%, 0 100%);
+  backdrop-filter: blur(8px);
 }
 .play-button {
   width: 100%;
