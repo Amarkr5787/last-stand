@@ -190,6 +190,7 @@ function Character() {
 
 export default function App() {
   const [active, setActive] = useState("Lobby");
+  const [navPopup, setNavPopup] = useState<string | null>(null);
   const [queue, setQueue] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -208,6 +209,39 @@ export default function App() {
     ["Skins", "shirt"],
     ["Shop", "cart"],
   ] as [string, IconName][];
+
+  const navDetails: Record<string, { eyebrow: string; description: string; actions: string[] }> = {
+    Lobby: {
+      eyebrow: "BATTLE ROYALE HQ",
+      description: "Manage your squad, choose a drop zone, and prepare for deployment.",
+      actions: ["SQUAD STATUS", "MATCH RULES", "SEASON BRIEFING"],
+    },
+    Inventory: {
+      eyebrow: "LOADOUT",
+      description: "Review your weapons, equipment, and saved combat presets.",
+      actions: ["WEAPONS", "EQUIPMENT", "PRESETS"],
+    },
+    Skins: {
+      eyebrow: "LOCKER",
+      description: "Customize your operative with unlocked outfits and accessories.",
+      actions: ["OUTFITS", "BACK BLING", "EMOTES"],
+    },
+    Shop: {
+      eyebrow: "FEATURED STORE",
+      description: "Browse the latest field gear, bundles, and limited-time drops.",
+      actions: ["FEATURED", "DAILY", "BUNDLES"],
+    },
+  };
+
+  const showNavPopup = (label: string) => {
+    setActive(label);
+    setNavPopup(label);
+  };
+
+  const slideMap = (direction: number) => {
+    const currentIndex = maps.findIndex((mapOption) => mapOption.name === map);
+    setMap(maps[(currentIndex + direction + maps.length) % maps.length].name);
+  };
 
   return (
     <main className="game-shell">
@@ -237,7 +271,7 @@ export default function App() {
             <button
               className={active === label ? "active" : ""}
               key={label}
-              onClick={() => setActive(label)}
+              onClick={() => showNavPopup(label)}
             >
               <Icon name={icon} />
               <span>{label}</span>
@@ -351,16 +385,6 @@ export default function App() {
             <h1>OUTLANDS</h1>
             <p>23 DAYS REMAINING</p>
           </div>
-          {active !== "Lobby" && (
-            <div className="section-toast">
-              <Icon name={nav.find((n) => n[0] === active)?.[1] || "home"} />
-              <span>
-                <small>VIEWING</small>
-                {active.toUpperCase()}
-              </span>
-              <button onClick={() => setActive("Lobby")}>RETURN</button>
-            </div>
-          )}
           <div className="player-banner">
             <span className="crown">♜</span>
             <b>Rex_Ranger</b>
@@ -396,15 +420,27 @@ export default function App() {
           <div className="play-zone">
             <div className="map-picker panel">
               <div className="map-picker-title">
-                <span>SELECT MAP</span>
-                <small>{map === "RANDOM" ? "ROTATION ENABLED" : "PREFERRED MAP"}</small>
+                <div>
+                  <span>SELECT MAP</span>
+                  <small>{map === "RANDOM" ? "ROTATION ENABLED" : "PREFERRED MAP"}</small>
+                </div>
+                <div className="map-slide-controls">
+                  <button onClick={() => slideMap(-1)} aria-label="Previous map">
+                    <Icon name="chevron" size={14} />
+                  </button>
+                  <button onClick={() => slideMap(1)} aria-label="Next map">
+                    <Icon name="chevron" size={14} />
+                  </button>
+                </div>
               </div>
-              <div className="map-options">
+              <div className="map-options" aria-label="Map carousel">
                 {maps.map((mapOption) => (
                   <button
                     className={`${mapOption.className} ${map === mapOption.name ? "selected" : ""}`}
                     key={mapOption.name}
                     onClick={() => setMap(mapOption.name)}
+                    aria-pressed={map === mapOption.name}
+                    aria-label={`Select ${mapOption.name} map`}
                   >
                     <i />
                     <span>
@@ -501,6 +537,44 @@ export default function App() {
         </span>
         <span>BUILD 1.4.07</span>
       </footer>
+
+      {navPopup && (
+        <div className="modal-backdrop nav-backdrop" onMouseDown={() => setNavPopup(null)}>
+          <section
+            className="nav-modal panel"
+            onMouseDown={(event) => event.stopPropagation()}
+            aria-modal="true"
+            role="dialog"
+            aria-label={`${navPopup} menu`}
+          >
+            <div className="nav-modal-head">
+              <span className="nav-modal-icon">
+                <Icon name={nav.find((item) => item[0] === navPopup)?.[1] || "home"} size={27} />
+              </span>
+              <span>
+                <small>{navDetails[navPopup].eyebrow}</small>
+                <b>{navPopup.toUpperCase()}</b>
+              </span>
+              <button onClick={() => setNavPopup(null)} aria-label={`Close ${navPopup} menu`}>
+                <Icon name="close" />
+              </button>
+            </div>
+            <p>{navDetails[navPopup].description}</p>
+            <div className="nav-modal-actions">
+              {navDetails[navPopup].actions.map((action, index) => (
+                <button key={action}>
+                  <span>0{index + 1}</span>
+                  <b>{action}</b>
+                  <Icon name="chevron" size={17} />
+                </button>
+              ))}
+            </div>
+            <button className="nav-modal-close" onClick={() => setNavPopup(null)}>
+              CONTINUE
+            </button>
+          </section>
+        </div>
+      )}
 
       {settingsOpen && (
         <div className="modal-backdrop" onMouseDown={() => setSettingsOpen(false)}>

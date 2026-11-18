@@ -35,8 +35,8 @@
   min-height: 650px;
   overflow: hidden;
   background:
-    radial-gradient(circle at 55% 48%, rgba(121, 167, 77, 0.25), transparent 31%),
-    linear-gradient(165deg, #405950 0%, #263f42 42%, #13272f 100%);
+    radial-gradient(circle at 55% 48%, rgba(210, 218, 220, 0.17), transparent 31%),
+    linear-gradient(165deg, #596166 0%, #3b4449 44%, #252d32 100%);
   font-family: Inter, sans-serif;
 }
 
@@ -74,8 +74,8 @@
 .terrain {
   position: absolute;
   display: block;
-  border: 2px solid rgba(148, 183, 126, 0.18);
-  background: rgba(71, 104, 79, 0.5);
+  border: 2px solid rgba(205, 215, 218, 0.12);
+  background: rgba(77, 87, 91, 0.48);
   transform: rotate(-12deg);
   border-radius: 45% 55% 30% 70%;
 }
@@ -116,10 +116,10 @@
   width: 32px;
   height: 32px;
   border-radius: 55% 45% 60% 40%;
-  background: #213c38;
+  background: #394448;
   box-shadow:
-    inset -7px -5px #172e2d,
-    0 8px 14px #0a1616;
+    inset -7px -5px #283236,
+    0 8px 14px #171d20;
   transform: rotate(30deg);
 }
 .tree-1 {
@@ -692,6 +692,10 @@
   justify-content: space-between;
   margin-bottom: 9px;
 }
+.map-picker-title > div:first-child {
+  display: flex;
+  flex-direction: column;
+}
 .map-picker-title span {
   font: 800 11px "Barlow Condensed";
   letter-spacing: 1.4px;
@@ -701,18 +705,48 @@
   font: 700 7px Inter;
   letter-spacing: 0.8px;
 }
-.map-options {
+.map-slide-controls {
+  display: flex;
+  gap: 4px;
+}
+.map-slide-controls button {
+  width: 24px;
+  height: 24px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  place-items: center;
+  color: #aab7bb;
+  background: #1a292f;
+  border: 1px solid #3a494f;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.map-slide-controls button:first-child svg {
+  transform: rotate(180deg);
+}
+.map-slide-controls button:hover {
+  color: var(--lime);
+  border-color: var(--lime);
+}
+.map-options {
+  display: flex;
   gap: 6px;
+  width: 100%;
+  overflow: hidden;
 }
 .map-options button {
   position: relative;
+  flex: 0 0 32px;
+  min-width: 0;
   height: 66px;
   overflow: hidden;
   border: 1px solid #3a494f;
   background: #17262d;
   color: #a2afb3;
+  transition:
+    flex-basis 0.34s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .map-options button::after {
   content: "";
@@ -760,8 +794,18 @@
   transform: scale(1.08);
 }
 .map-options button.selected {
+  flex-basis: calc(100% - 76px);
   border-color: var(--lime);
   box-shadow: inset 0 0 0 1px rgba(200, 242, 58, 0.35);
+}
+.map-options button:not(.selected) > span {
+  opacity: 0;
+  transform: translateY(5px);
+}
+.map-options button > span {
+  transition:
+    opacity 0.18s ease 0.1s,
+    transform 0.25s ease;
 }
 .map-options button.selected::before {
   content: "";
@@ -841,40 +885,6 @@
   border-color: #ffbc72;
   box-shadow: 0 8px 25px rgba(228, 92, 40, 0.28);
 }
-.section-toast {
-  position: absolute;
-  z-index: 8;
-  top: 105px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 270px;
-  background: rgba(10, 20, 25, 0.94);
-  border: 1px solid rgba(200, 242, 58, 0.25);
-  padding: 11px 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
-}
-.section-toast > svg {
-  color: var(--lime);
-}
-.section-toast span {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  font: 800 14px "Barlow Condensed";
-  letter-spacing: 1px;
-}
-.section-toast small {
-  font: 600 7px Inter;
-  color: #75848a;
-}
-.section-toast button {
-  font: 700 8px Inter;
-  color: var(--lime);
-}
-
 .friends-panel {
   grid-column: 1;
   grid-row: 1;
@@ -1151,6 +1161,124 @@ footer .server {
   place-items: center;
   background: rgba(2, 7, 10, 0.7);
   backdrop-filter: blur(5px);
+}
+.nav-backdrop {
+  z-index: 40;
+  background: rgba(8, 12, 14, 0.54);
+  animation: backdrop-in 0.2s ease-out;
+}
+.nav-modal {
+  width: min(500px, calc(100vw - 48px));
+  padding: 24px;
+  animation: nav-modal-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+.nav-modal-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding-bottom: 17px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav-modal-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: #19220f;
+  background: var(--lime);
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.nav-modal-head > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.nav-modal-head small {
+  color: var(--lime);
+  font: 700 8px Inter;
+  letter-spacing: 1.7px;
+}
+.nav-modal-head b {
+  font: 900 italic 29px "Barlow Condensed";
+  letter-spacing: 1.5px;
+  line-height: 1;
+}
+.nav-modal-head button {
+  color: #89979d;
+}
+.nav-modal-head button:hover {
+  color: #fff;
+}
+.nav-modal > p {
+  margin: 16px 0;
+  color: #91a0a5;
+  font-size: 11px;
+  line-height: 1.65;
+}
+.nav-modal-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.nav-modal-actions button {
+  min-height: 90px;
+  padding: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  color: #dce4e5;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid #334249;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+.nav-modal-actions button:hover {
+  background: rgba(200, 242, 58, 0.07);
+  border-color: rgba(200, 242, 58, 0.65);
+}
+.nav-modal-actions span {
+  color: #69787e;
+  font: 700 8px Inter;
+}
+.nav-modal-actions b {
+  margin-top: auto;
+  font: 800 13px "Barlow Condensed";
+  letter-spacing: 0.7px;
+}
+.nav-modal-actions svg {
+  margin-left: auto;
+  color: var(--lime);
+}
+.nav-modal-close {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  color: #19220f;
+  background: var(--lime);
+  font: 800 11px Inter;
+  letter-spacing: 1.2px;
+}
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nav-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
 }
 .settings-modal {
   width: 460px;
