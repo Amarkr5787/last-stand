@@ -194,6 +194,9 @@ export default function App() {
   const [queue, setQueue] = useState(false);
   const [friendsOpen, setFriendsOpen] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState<string | null>(null);
+  const [messageText, setMessageText] = useState("");
+  const [messageHistory, setMessageHistory] = useState<Record<string, string[]>>({});
   const [mode, setMode] = useState("SQUADS");
   const [map, setMap] = useState("RANDOM");
 
@@ -242,6 +245,20 @@ export default function App() {
     const currentIndex = maps.findIndex((mapOption) => mapOption.name === map);
     setMap(maps[(currentIndex + direction + maps.length) % maps.length].name);
   };
+
+  const sendMessage = (text: string) => {
+    const message = text.trim();
+    if (!selectedFriend || !message) return;
+
+    setMessageHistory((current) => ({
+      ...current,
+      [selectedFriend]: [...(current[selectedFriend] || []), message],
+    }));
+    setMessageText("");
+  };
+
+  const activeFriend = friends.find((friend) => friend.name === selectedFriend);
+  const quickMessages = ["Ready to play?", "Join my party", "Which map?", "Good game!"];
 
   return (
     <main className="game-shell">
@@ -502,6 +519,8 @@ export default function App() {
                   className={!friend.online ? "offline" : ""}
                   key={friend.name}
                   tabIndex={friendsOpen ? 0 : -1}
+                  onClick={() => setSelectedFriend(friend.name)}
+                  aria-label={`Message ${friend.name}`}
                 >
                   <span
                     className="friend-avatar"
@@ -514,7 +533,9 @@ export default function App() {
                     <b>{friend.name}</b>
                     <small>{friend.status}</small>
                   </span>
-                  {friend.online && <i className="join">+</i>}
+                  <i className="join">
+                    <Icon name="chevron" size={13} />
+                  </i>
                 </button>
               ))}
             </div>
@@ -572,6 +593,87 @@ export default function App() {
             <button className="nav-modal-close" onClick={() => setNavPopup(null)}>
               CONTINUE
             </button>
+          </section>
+        </div>
+      )}
+
+      {activeFriend && (
+        <div
+          className="modal-backdrop message-backdrop"
+          onMouseDown={() => setSelectedFriend(null)}
+        >
+          <section
+            className="message-modal panel"
+            onMouseDown={(event) => event.stopPropagation()}
+            aria-modal="true"
+            role="dialog"
+            aria-label={`Message ${activeFriend.name}`}
+          >
+            <header className="message-head">
+              <span
+                className="friend-avatar message-avatar"
+                style={{ "--avatar": activeFriend.color } as React.CSSProperties}
+              >
+                {activeFriend.initials}
+                <i />
+              </span>
+              <span>
+                <small>{activeFriend.online ? "ONLINE NOW" : "OFFLINE — SEND FOR LATER"}</small>
+                <b>{activeFriend.name}</b>
+              </span>
+              <button onClick={() => setSelectedFriend(null)} aria-label="Close messages">
+                <Icon name="close" />
+              </button>
+            </header>
+
+            <div className="message-thread" aria-live="polite">
+              {(messageHistory[activeFriend.name] || []).length === 0 ? (
+                <div className="message-empty">
+                  <Icon name="headset" size={24} />
+                  <b>START A CONVERSATION</b>
+                  <small>Choose a quick message or type your own below.</small>
+                </div>
+              ) : (
+                (messageHistory[activeFriend.name] || []).map((message, index) => (
+                  <div className="sent-message" key={`${message}-${index}`}>
+                    <small>YOU</small>
+                    <p>{message}</p>
+                    <span>SENT</span>
+                  </div>
+                ))
+              )}
+            </div>
+
+            <div className="quick-message-area">
+              <small>QUICK MESSAGES</small>
+              <div className="quick-messages">
+                {quickMessages.map((message) => (
+                  <button key={message} onClick={() => sendMessage(message)}>
+                    {message}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <form
+              className="message-composer"
+              onSubmit={(event) => {
+                event.preventDefault();
+                sendMessage(messageText);
+              }}
+            >
+              <input
+                value={messageText}
+                onChange={(event) => setMessageText(event.target.value)}
+                placeholder={`Message ${activeFriend.name}`}
+                maxLength={120}
+                autoFocus
+              />
+              <button type="submit" disabled={!messageText.trim()} aria-label="Send message">
+                SEND
+                <Icon name="chevron" size={15} />
+              </button>
+            </form>
           </section>
         </div>
       )}

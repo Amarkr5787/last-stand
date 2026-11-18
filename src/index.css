@@ -1097,6 +1097,9 @@
   border: 1px solid #37464c;
   font-style: normal;
 }
+.join svg {
+  margin: auto;
+}
 .friend-list .offline {
   opacity: 0.48;
 }
@@ -1268,6 +1271,189 @@ footer .server {
   background: var(--lime);
   font: 800 11px Inter;
   letter-spacing: 1.2px;
+}
+.message-backdrop {
+  animation: backdrop-in 0.2s ease-out;
+}
+.message-modal {
+  width: min(470px, calc(100vw - 48px));
+  padding: 0;
+  overflow: hidden;
+  animation: nav-modal-in 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+.message-head {
+  position: relative;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 17px;
+  background: rgba(255, 255, 255, 0.035);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.message-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 110px;
+  height: 2px;
+  background: var(--lime);
+}
+.message-avatar {
+  width: 45px;
+  height: 45px;
+  font-size: 12px;
+}
+.message-head > span:nth-child(2) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.message-head small {
+  color: var(--lime);
+  font: 700 8px Inter;
+  letter-spacing: 1.2px;
+}
+.message-head b {
+  margin-top: 2px;
+  font: 800 22px "Barlow Condensed";
+  letter-spacing: 0.5px;
+}
+.message-head > button {
+  color: #829097;
+}
+.message-head > button:hover {
+  color: #fff;
+}
+.message-thread {
+  height: 205px;
+  padding: 16px 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  overflow-y: auto;
+  background:
+    linear-gradient(rgba(7, 15, 19, 0.72), rgba(7, 15, 19, 0.72)),
+    radial-gradient(circle at 75% 20%, rgba(200, 242, 58, 0.08), transparent 34%);
+}
+.message-empty {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #66767c;
+  text-align: center;
+}
+.message-empty svg {
+  margin-bottom: 8px;
+}
+.message-empty b {
+  color: #aeb9bc;
+  font: 800 13px "Barlow Condensed";
+  letter-spacing: 1px;
+}
+.message-empty small {
+  margin-top: 4px;
+  font-size: 8px;
+}
+.sent-message {
+  max-width: 78%;
+  margin-left: auto;
+  padding: 9px 11px;
+  color: #17200e;
+  background: linear-gradient(135deg, #b4da30, #d5f85a);
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+.sent-message small {
+  display: block;
+  color: rgba(23, 32, 14, 0.62);
+  font: 800 7px Inter;
+  letter-spacing: 0.8px;
+}
+.sent-message p {
+  margin-top: 3px;
+  font: 600 11px Inter;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.sent-message span {
+  display: block;
+  margin-top: 4px;
+  color: rgba(23, 32, 14, 0.58);
+  font: 800 6px Inter;
+  text-align: right;
+  letter-spacing: 0.6px;
+}
+.quick-message-area {
+  padding: 12px 17px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.quick-message-area > small {
+  color: #718087;
+  font: 700 7px Inter;
+  letter-spacing: 1.1px;
+}
+.quick-messages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.quick-messages button {
+  padding: 7px 9px;
+  color: #b3bec1;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid #35444a;
+  font: 600 9px Inter;
+}
+.quick-messages button:hover {
+  color: var(--lime);
+  border-color: rgba(200, 242, 58, 0.55);
+}
+.message-composer {
+  display: flex;
+  gap: 8px;
+  padding: 0 17px 17px;
+}
+.message-composer input {
+  height: 42px;
+  min-width: 0;
+  flex: 1;
+  padding: 0 12px;
+  color: #e5ebec;
+  background: #0b171d;
+  border: 1px solid #344249;
+  font-size: 10px;
+}
+.message-composer input:focus {
+  border-color: rgba(200, 242, 58, 0.65);
+}
+.message-composer input::placeholder {
+  color: #617077;
+}
+.message-composer button {
+  height: 42px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #17200e;
+  background: var(--lime);
+  font: 800 9px Inter;
+  letter-spacing: 0.7px;
+}
+.message-composer button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
 }
 @keyframes backdrop-in {
   from {
