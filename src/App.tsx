@@ -515,28 +515,34 @@ export default function App() {
             <div className="friend-label">ONLINE — 3</div>
             <div className="friend-list">
               {friends.map((friend) => (
-                <button
-                  className={!friend.online ? "offline" : ""}
-                  key={friend.name}
-                  tabIndex={friendsOpen ? 0 : -1}
-                  onClick={() => setSelectedFriend(friend.name)}
-                  aria-label={`Message ${friend.name}`}
-                >
-                  <span
-                    className="friend-avatar"
-                    style={{ "--avatar": friend.color } as React.CSSProperties}
+                <div className={!friend.online ? "offline" : ""} key={friend.name}>
+                  <button
+                    className="friend-profile"
+                    tabIndex={friendsOpen ? 0 : -1}
+                    onClick={() => setSelectedFriend(friend.name)}
+                    aria-label={`Open ${friend.name}'s profile and chat`}
                   >
-                    {friend.initials}
-                    <i />
-                  </span>
-                  <span>
-                    <b>{friend.name}</b>
-                    <small>{friend.status}</small>
-                  </span>
-                  <i className="join">
-                    <Icon name="chevron" size={13} />
-                  </i>
-                </button>
+                    <span
+                      className="friend-avatar"
+                      style={{ "--avatar": friend.color } as React.CSSProperties}
+                    >
+                      {friend.initials}
+                      <i />
+                    </span>
+                    <span>
+                      <b>{friend.name}</b>
+                      <small>{friend.status}</small>
+                    </span>
+                  </button>
+                  <button
+                    className="join"
+                    tabIndex={friendsOpen ? 0 : -1}
+                    onClick={() => setSelectedFriend(friend.name)}
+                    aria-label={`Chat with ${friend.name}`}
+                  >
+                    <Icon name="plus" size={14} />
+                  </button>
+                </div>
               ))}
             </div>
             <button className="social-button" tabIndex={friendsOpen ? 0 : -1}>
